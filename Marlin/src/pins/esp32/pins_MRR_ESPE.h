@@ -30,7 +30,7 @@
 
 #include "env_validate.h"
 
-#if EXTRUDERS > 2 || E_STEPPERS > 2
+#if EXTRUDERS > 1 || E_STEPPERS > 1
   #error "MRR ESPE only supports two E Steppers. Comment out this line to continue."
 #elif HOTENDS > 1
   #error "MRR ESPE only supports one hotend / E-stepper. Comment out this line to continue."
@@ -47,6 +47,10 @@
 #define Y_STOP_PIN                            32
 #define Z_STOP_PIN                            33
 
+// probe
+#define Z_MIN_PROBE_PIN                       15
+#define Z_PROBE_SERVO_NR                      0
+#define SERVO0_PIN                            17//137
 //
 // Enable I2S stepper stream
 //
@@ -60,35 +64,36 @@
 //
 // Steppers
 //
+#define MOTOR_ENABLE_PIN                     128
 #define X_STEP_PIN                           129
 #define X_DIR_PIN                            130
-#define X_ENABLE_PIN                         128
+#define X_ENABLE_PIN                         MOTOR_ENABLE_PIN
 //#define X_CS_PIN                            21
 
 #define Y_STEP_PIN                           132
 #define Y_DIR_PIN                            133
-#define Y_ENABLE_PIN                         131
+#define Y_ENABLE_PIN                         MOTOR_ENABLE_PIN //131
 //#define Y_CS_PIN                            22
 
 #define Z_STEP_PIN                           135
 #define Z_DIR_PIN                            136
-#define Z_ENABLE_PIN                         134
+#define Z_ENABLE_PIN                         MOTOR_ENABLE_PIN //134
 //#define Z_CS_PIN                             5  // SS_PIN
 
 #define E0_STEP_PIN                          138
 #define E0_DIR_PIN                           139
-#define E0_ENABLE_PIN                        137
+#define E0_ENABLE_PIN                        MOTOR_ENABLE_PIN // 137
 //#define E0_CS_PIN                           21
 
-#define E1_STEP_PIN                          141
-#define E1_DIR_PIN                           142
-#define E1_ENABLE_PIN                        140
-//#define E1_CS_PIN                           22
+//#define E1_STEP_PIN                          141
+//#define E1_DIR_PIN                           142
+//#define E1_ENABLE_PIN                        MOTOR_ENABLE_PIN // 140
+////#define E1_CS_PIN                           22
 
-#define Z2_STEP_PIN                          141
-#define Z2_DIR_PIN                           142
-#define Z2_ENABLE_PIN                        140
-//#define Z2_CS_PIN                            5
+//#define Z2_STEP_PIN                          141
+//#define Z2_DIR_PIN                           142
+//#define Z2_ENABLE_PIN                        MOTOR_ENABLE_PIN //140
+////#define Z2_CS_PIN                            5
 
 //
 // Temperature Sensors
@@ -101,13 +106,14 @@
 // Heaters / Fans
 //
 #define HEATER_0_PIN                         145  // 2
-#define FAN_PIN                              146  // 15
+#define FAN_PIN                              17 //143 //146  // 15
+// #define FAN_SOFT_PWM
 #define HEATER_BED_PIN                       144  // 4
 
-#define CONTROLLER_FAN_PIN                   147
+//#define CONTROLLER_FAN_PIN                   147
 //#define E0_AUTO_FAN_PIN                    148  // need to update Configuration_adv.h @section extruder
 //#define E1_AUTO_FAN_PIN                    149  // need to update Configuration_adv.h @section extruder
-#define FAN1_PIN                             149
+//#define FAN1_PIN                             149
 
 //
 // MicroSD card
@@ -122,19 +128,50 @@
 // LCDs and Controllers //
 //////////////////////////
 
-#if HAS_MARLINUI_U8GLIB
+//
+// LCD / Controller
+//
+#if ANY(VIKI2, miniVIKI)
 
-  #define LCD_PINS_RS                         13
-  #define LCD_PINS_ENABLE                     17
-  #define LCD_PINS_D4                         16
+  #define LCD_SCREEN_ROT_180
+
+  #define KILL_PIN                         4  // (41) J5-4 & AUX-4
+  // #define LCD_PINS_RS                      P0_16  // (16) J3-7 & AUX-4
+  // #define LCD_SDSS                         P0_16  // (16) J3-7 & AUX-4
+  // #define LCD_BACKLIGHT_PIN                P0_16  // (16) J3-7 & AUX-4 - only used on DOGLCD controllers
+  // #define LCD_PINS_ENABLE                  P0_18  // (51) (MOSI) J3-10 & AUX-3
+  // #define LCD_PINS_D4                      P0_15  // (52) (SCK)  J3-9 & AUX-3
+  #define BEEPER_PIN                       146 //P1_31
+  #define DOGLCD_A0                        147 //P2_11
+  #define DOGLCD_CS                        148 //17
+  #define DOGLCD_SCK                       18 //SCK_PIN
+  #define DOGLCD_MOSI                      23 //MOSI_PIN
+
+  #define BTN_EN1                          0
+  #define BTN_EN2                          12
+  #define BTN_ENC                          14
+
+  #define SD_DETECT_PIN                    15 //P1_18
+  //#define SDSS                             5 //P1_21
+
+  #define STAT_LED_RED_PIN                 150 //P1_19
+  #define STAT_LED_BLUE_PIN                149 //P1_20
+
+//#endif
+#elif HAS_MARLINUI_U8GLIB
+
+  #define LCD_PINS_RS                         147 //18//13
+  #define LCD_PINS_ENABLE                     148 //17
+  #define LCD_PINS_D4                         141 //23 //16
+  #define LCD_PINS_D6                         149 //reset pin
 
   #if ENABLED(CR10_STOCKDISPLAY)
 
-    #define BEEPER_PIN                       151
+    #define BEEPER_PIN                       146
 
   #elif IS_RRD_FG_SC
 
-    #define BEEPER_PIN                       151
+    #define BEEPER_PIN                       146
 
     //#define LCD_PINS_D5                    150
     //#define LCD_PINS_D6                    152
@@ -142,13 +179,20 @@
 
   #else
 
-    #error "Only CR10_STOCKDISPLAY and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER are currently supported. Comment out this line to continue."
+    //#error "Only CR10_STOCKDISPLAY and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER are currently supported. Comment out this line to continue."
 
   #endif
 
-  #define BTN_EN1                              0
-  #define BTN_EN2                             12
+  #define BTN_EN1                             0
+  #define BTN_EN2                             2
   #define BTN_ENC                             14
+  #define BTN_BACK                            4
+  #define KILL_PIN                            13
+  #define STAT_LED_RED_PIN                    150
+  #define STAT_LED_BLUE_PIN                   134
+  #define BEEPER_PIN                          146
+
+  #define LCD_SCREEN_ROT_180
 
 #endif // HAS_MARLINUI_U8GLIB
 

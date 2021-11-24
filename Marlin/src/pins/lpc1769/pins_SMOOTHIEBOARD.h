@@ -33,17 +33,17 @@
 //
 // Servos
 //
-#define SERVO0_PIN                         P1_23
+#define SERVO0_PIN                         P1_10 //P1_23
 
 //
 // Limit Switches
 //
 #define X_MIN_PIN                          P1_24
-#define X_MAX_PIN                          P1_25
+#define X_MAX_PIN                          P1_24 //P1_25
 #define Y_MIN_PIN                          P1_26
-#define Y_MAX_PIN                          P1_27
+#define Y_MAX_PIN                          P1_26 //P1_27
 #define Z_MIN_PIN                          P1_28
-#define Z_MAX_PIN                          P1_29
+#define Z_MAX_PIN                          P1_28 //P1_29
 
 //
 // Steppers
@@ -53,20 +53,20 @@
 #define X_ENABLE_PIN                       P0_04
 
 #define Y_STEP_PIN                         P2_01
-#define Y_DIR_PIN                          P0_11
-#define Y_ENABLE_PIN                       P0_10
+#define Y_DIR_PIN                          P0_20
+#define Y_ENABLE_PIN                       P0_04 //P0_10
 
 #define Z_STEP_PIN                         P2_02
-#define Z_DIR_PIN                          P0_20
-#define Z_ENABLE_PIN                       P0_19
+#define Z_DIR_PIN                          P0_11
+#define Z_ENABLE_PIN                       P0_04 //P0_19
 
 #define E0_STEP_PIN                        P2_03
 #define E0_DIR_PIN                         P0_22
-#define E0_ENABLE_PIN                      P0_21
+#define E0_ENABLE_PIN                      P0_04 //P0_21
 
-#define E1_STEP_PIN                        P2_08
-#define E1_DIR_PIN                         P2_13
-#define E1_ENABLE_PIN                      P4_29
+// #define E1_STEP_PIN                        P2_08
+// #define E1_DIR_PIN                         P2_13
+// #define E1_ENABLE_PIN                      P4_29
 
 //
 // Temperature Sensors
@@ -74,38 +74,49 @@
 //
 #define TEMP_0_PIN                      P0_23_A0  // (T1)
 #define TEMP_BED_PIN                    P0_24_A1  // (T2)
-#define TEMP_1_PIN                      P0_25_A2  // (T3)
-#define TEMP_2_PIN                      P0_26_A3  // (T4)
+// #define TEMP_1_PIN                      P0_25_A2  // (T3)
+// #define TEMP_2_PIN                      P0_26_A3  // (T4)
 
 //
 // Heaters / Fans
 //
 #define HEATER_BED_PIN                     P2_05
 #define HEATER_0_PIN                       P2_07
-#define HEATER_1_PIN                       P1_23
+// #define HEATER_1_PIN                       P1_23
 #ifndef FAN_PIN
-  #define FAN_PIN                          P2_06
+  #define FAN_PIN                          P1_18 //P2_06
 #endif
-#define FAN1_PIN                           P2_04
+// #define FAN1_PIN                           P2_04
 
 //
 // LCD / Controller
 //
 #if ANY(VIKI2, miniVIKI)
 
-  #define BEEPER_PIN                       P1_31
-  #define DOGLCD_A0                        P2_11
+  #define LCD_SCREEN_ROT_180
+
+  #define KILL_PIN                       P1_22  // (41) J5-4 & AUX-4
+  #define LCD_PINS_RS                      P0_16  // (16) J3-7 & AUX-4
+  #define LCD_SDSS                         P0_16  // (16) J3-7 & AUX-4
+  #define LCD_BACKLIGHT_PIN                P0_16  // (16) J3-7 & AUX-4 - only used on DOGLCD controllers
+  #define LCD_PINS_ENABLE                  P0_18  // (51) (MOSI) J3-10 & AUX-3
+  #define LCD_PINS_D4                      P0_15  // (52) (SCK)  J3-9 & AUX-3
+
+  #define BEEPER_PIN                       P0_25 //P1_31
+  #define DOGLCD_A0                        P2_06 //P2_11
   #define DOGLCD_CS                        P0_16
+  #define DOGLCD_SCK                       P0_15 //SCK_PIN
+  #define DOGLCD_MOSI                      P0_18 //MOSI_PIN
 
   #define BTN_EN1                          P3_25
   #define BTN_EN2                          P3_26
-  #define BTN_ENC                          P1_30
+  #define BTN_ENC                          P2_11 //P1_30
 
-  #define SD_DETECT_PIN                    P1_18
-  #define SDSS                             P1_21
+  #define SD_DETECT_PIN                    P1_31 //P1_18
+  #define SDSS                             P0_16 //P1_21
 
-  #define STAT_LED_RED_PIN                 P1_19
-  #define STAT_LED_BLUE_PIN                P1_20
+  #define STAT_LED_RED_PIN                 P4_29 //P1_19
+  #define STAT_LED_BLUE_PIN                P2_08 //P1_20
 
 #elif HAS_WIRED_LCD
 
@@ -177,3 +188,28 @@
 #ifndef DIGIPOT_I2C_ADDRESS_A
   #define DIGIPOT_I2C_ADDRESS_A             0x2C  // unshifted slave address (58 <- 2C << 1)
 #endif
+
+//
+// SD Support
+//
+#ifndef SDCARD_CONNECTION
+  #define SDCARD_CONNECTION              ONBOARD
+#endif
+
+#define ONBOARD_SD_CS_PIN                  P0_06  // Chip select for "System" SD card
+
+#if SD_CONNECTION_IS(LCD)
+  #define SCK_PIN                          P0_15
+  #define MISO_PIN                         P0_17
+  #define MOSI_PIN                         P0_18
+  #define SS_PIN                           P1_23
+#elif SD_CONNECTION_IS(ONBOARD)
+  #undef SD_DETECT_PIN
+  #define SCK_PIN                          P0_07
+  #define MISO_PIN                         P0_08
+  #define MOSI_PIN                         P0_09
+  #define SS_PIN               ONBOARD_SD_CS_PIN
+#elif SD_CONNECTION_IS(CUSTOM_CABLE)
+  #error "No custom SD drive cable defined for this board."
+#endif
+

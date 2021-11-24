@@ -128,6 +128,10 @@
   #define THERMISTOR_NAME "Pt100 1K"
 #elif THERMISTOR_ID == 666
   #define THERMISTOR_NAME "Einstart S"
+#elif THERMISTOR_ID == 900
+  #define THERMISTOR_NAME "PT100 Cetus UP"
+#elif THERMISTOR_ID == 901
+  #define THERMISTOR_NAME "inverted NTC 100K Cetus"
 
 // High Temperature thermistors
 #elif THERMISTOR_ID == 61
