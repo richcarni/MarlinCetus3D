@@ -38,7 +38,12 @@ const temp_entry_t temptable_900[] PROGMEM = {
   { OV(  484), 180 },
   { OV(  533), 200 },
   { OV(  580), 220 },
-  { OV(  636), 240 }
+  { OV(  636), 240 },
+  
+  // The following extrapolated from the above
+  { OV(  684), 260 },
+  { OV(  735), 280 },
+  { OV(  785), 300 }
 };
 
 // // R25 = 100 kOhm, beta25 = 4092 K, 4.7 kOhm pull-up, bed thermistor
