@@ -40,6 +40,12 @@
 #define BOARD_WEBSITE_URL    "github.com/maplerainresearch/MRR_ESPE"
 #define DEFAULT_MACHINE_NAME BOARD_INFO_NAME
 
+// Added by RC; pull down nOE line 
+#define BOARD_PREINIT() { \
+  OUT_WRITE(5, LOW); \
+}
+// End addition
+
 //
 // Limit Switches
 //
@@ -121,7 +127,7 @@
 #define SD_MOSI_PIN                           23
 #define SD_MISO_PIN                           19
 #define SD_SCK_PIN                            18
-#define SDSS                                   5
+#define SDSS                                   152 // Modified by RC; SDSS is now fixed high; 152 should point to nothing
 #define USES_SHARED_SPI                           // SPI is shared by SD card with TMC SPI drivers
 
 //////////////////////////

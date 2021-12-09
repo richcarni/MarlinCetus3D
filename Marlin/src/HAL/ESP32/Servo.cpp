@@ -52,6 +52,9 @@ void Servo::write(int inDegrees) {
   degrees = constrain(inDegrees, MIN_ANGLE, MAX_ANGLE);
   int us = map(degrees, MIN_ANGLE, MAX_ANGLE, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
   int duty = map(us, 0, TAU_USEC, 0, MAX_COMPARE);
+  // Added by RC - Invert Servo PWM for bltouch
+  duty = MAX_COMPARE - duty;
+  // End addition
   ledcWrite(channel, duty);
 }
 
