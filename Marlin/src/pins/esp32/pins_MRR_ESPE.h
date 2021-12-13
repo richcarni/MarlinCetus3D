@@ -42,16 +42,16 @@
 
 // Added by RC; pull down nOE line 
 #define BOARD_PREINIT() { \
-  OUT_WRITE(5, LOW); \
+  OUT_WRITE(33, LOW); \
 }
 // End addition
 
 //
 // Limit Switches
 //
-#define X_STOP_PIN                            35
-#define Y_STOP_PIN                            32
-#define Z_STOP_PIN                            33
+#define X_STOP_PIN                            32 //35
+#define Y_STOP_PIN                            35 //32
+#define Z_STOP_PIN                            34 //33
 
 // probe
 #define Z_MIN_PROBE_PIN                       15
@@ -71,13 +71,13 @@
 // Steppers
 //
 #define MOTOR_ENABLE_PIN                     128
-#define X_STEP_PIN                           129
-#define X_DIR_PIN                            130
+#define X_STEP_PIN                           132 //129
+#define X_DIR_PIN                            133 //130
 #define X_ENABLE_PIN                         MOTOR_ENABLE_PIN
 //#define X_CS_PIN                            21
 
-#define Y_STEP_PIN                           132
-#define Y_DIR_PIN                            133
+#define Y_STEP_PIN                           129 //132
+#define Y_DIR_PIN                            130 //133
 #define Y_ENABLE_PIN                         MOTOR_ENABLE_PIN //131
 //#define Y_CS_PIN                            22
 
@@ -105,7 +105,7 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN                            36  // Analog Input
-#define TEMP_1_PIN                            34  // Analog Input
+// #define TEMP_1_PIN                            34  // Analog Input
 #define TEMP_BED_PIN                          39  // Analog Input
 
 //
@@ -127,7 +127,7 @@
 #define SD_MOSI_PIN                           23
 #define SD_MISO_PIN                           19
 #define SD_SCK_PIN                            18
-#define SDSS                                   152 // Modified by RC; SDSS is now fixed high; 152 should point to nothing
+#define SDSS                                   5
 #define USES_SHARED_SPI                           // SPI is shared by SD card with TMC SPI drivers
 
 //////////////////////////
